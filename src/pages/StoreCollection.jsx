@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../services/api";
+import api from "../Services/api";
 
 const money = (value) =>
   `₹${Number(value || 0).toLocaleString("en-IN")}`;

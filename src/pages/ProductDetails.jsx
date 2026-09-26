@@ -8,7 +8,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import api from "../services/api";
+import api from "../Services/api";
 
 const money = (n) =>
   `₹${Number(n || 0).toLocaleString("en-IN")}`;

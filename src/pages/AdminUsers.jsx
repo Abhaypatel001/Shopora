@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../services/api";
+import api from "../Services/api";
 
 const formatDate = (date) =>
   new Date(date).toLocaleDateString("en-IN", {
