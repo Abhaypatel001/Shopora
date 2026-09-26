@@ -1,4 +1,4 @@
-const Product = require("../models/Product");
+const Product = require("../Models/Product");
 const cloudinary = require("../config/cloudinary");
 
 // ==========================================

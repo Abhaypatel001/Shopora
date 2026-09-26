@@ -1,4 +1,4 @@
-const SupportTicket = require("../models/SupportTicket");
+const SupportTicket = require("../Models/SupportTicket");
 const mongoose = require("mongoose");
 
 // ==========================================
