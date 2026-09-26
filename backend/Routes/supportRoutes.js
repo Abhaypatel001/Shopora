@@ -11,7 +11,7 @@ const {
 const {
   protect,
   adminOnly,
-} = require("../middleware/authMiddleware");
+} = require("../Middleware/authMiddleware");
 
 const router = express.Router();
 
