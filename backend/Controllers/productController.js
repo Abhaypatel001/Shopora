@@ -1,5 +1,5 @@
 const Product = require("../Models/Product");
-const cloudinary = require("../config/cloudinary");
+const cloudinary = require("../Config/cloudinary");
 
 // ==========================================
 // UPLOAD BUFFER TO CLOUDINARY
