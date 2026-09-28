@@ -42,7 +42,6 @@ canvas {
 a {
   text-decoration: none;
 }
-
 ul {
   margin: 0;
   padding: 0;
@@ -58,17 +57,21 @@ ul {
   padding-top: 104px;
 }
 
-(max-width: 760px) {
-#root {
-  padding-top: 210px;
-}
+/* ================= MOBILE ROOT SPACING ================= */
+
+@media (max-width: 760px) {
+  #root {
+    padding-top: 210px;
+  }
 }
 
-(max-width: 430px) {
-#root {
-  padding-top: 205px;
+@media (max-width: 430px) {
+  #root {
+    padding-top: 205px;
+  }
 }
-}
+
+/* ================= SHOPORA NAVBAR ================= */
 
 .shopora-nav {
   width: 100%;
