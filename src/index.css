@@ -1875,3 +1875,125 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
   .sn-action-text { max-width: 66px; }
   .sn-logo { font-size: 19px; }
 }
+/* =====================================================
+   MOBILE: 2 products per row on every product grid
+   ===================================================== */
+@media (max-width: 900px) {
+  .hm-grid--4,
+  .search-grid,
+  .category-grid,
+  .collection-grid,
+  .wishlist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hm-grid--4,
+  .search-grid,
+  .category-grid,
+  .collection-grid,
+  .wishlist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .wishlist-grid { padding: 10px; }
+
+  /* Square-ish images so 2 cards fit nicely */
+  .search-card-image,
+  .category-product-image,
+  .collection-image,
+  .wishlist-image-box {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+  .wishlist-image-box img { padding: 10px; }
+
+  /* Compact card content */
+  .search-card,
+  .category-product-card,
+  .collection-card,
+  .wishlist-product { border-radius: var(--r-md); }
+
+  .search-card-body,
+  .category-product-info,
+  .collection-info,
+  .wishlist-product-body { padding: 10px; }
+
+  .search-card-body h3,
+  .category-product-info h3,
+  .collection-info h3,
+  .wishlist-product-body h3 {
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 5px 0 6px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    min-height: 2.7em;
+  }
+
+  .search-price strong,
+  .category-price-row strong,
+  .collection-price strong,
+  .wishlist-price strong { font-size: 16px; }
+
+  .search-price s,
+  .category-price-row del,
+  .collection-price del,
+  .wishlist-price del { font-size: 11px; }
+
+  .search-price,
+  .category-price-row,
+  .collection-price,
+  .wishlist-price { margin: 8px 0 10px; gap: 4px 6px; }
+
+  .search-rating,
+  .wishlist-rating,
+  .category-rating b { font-size: 11px; }
+
+  .search-cart-btn,
+  .category-view-btn,
+  .collection-view-btn,
+  .wishlist-view-btn {
+    min-height: 36px;
+    padding: 0 6px;
+    font-size: 12px;
+  }
+
+  .search-card-image span,
+  .category-discount,
+  .collection-discount,
+  .wishlist-discount { font-size: 10px; padding: 3px 7px; top: 8px; left: 8px; }
+}
+
+/* Very small phones: still 2 columns, just tighter */
+@media (max-width: 360px) {
+  .hm-grid--4,
+  .search-grid,
+  .category-grid,
+  .collection-grid,
+  .wishlist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+
+  .search-card-body,
+  .category-product-info,
+  .collection-info,
+  .wishlist-product-body { padding: 8px; }
+
+  .search-card-body h3,
+  .category-product-info h3,
+  .collection-info h3,
+  .wishlist-product-body h3 { font-size: 12px; }
+
+  .search-price strong,
+  .category-price-row strong,
+  .collection-price strong,
+  .wishlist-price strong { font-size: 14px; }
+
+  .search-cart-btn,
+  .category-view-btn,
+  .collection-view-btn,
+  .wishlist-view-btn { font-size: 11px; }
+}
