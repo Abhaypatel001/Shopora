@@ -389,8 +389,8 @@ export default function AdminDashboard() {
       // REQUEST URL
       // ----------------------------------------
       const url = editingId
-        ? `http://localhost:5000/api/products/${editingId}`
-        : "http://localhost:5000/api/products";
+        ? `https://shopora-uefe.onrender.com/api/products/${editingId}`
+        : "https://shopora-uefe.onrender.com/api/products";
 
       const method = editingId
         ? "PUT"
