@@ -2401,11 +2401,11 @@ to {
 }
 }
 
-(hover: none) and (pointer: coarse) {
-.hm-cta:hover,
+@media (hover: none) and (pointer: coarse) {
+  .hm-cta:hover,
   .hm-promo:hover {
-  transform: none;
-}
+    transform: none;
+  }
 }
 
 .cart-page {
