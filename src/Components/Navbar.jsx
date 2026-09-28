@@ -1,12 +1,7 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-
 import api from "../Services/api";
+import "./Navbar.css";
 
 const CATEGORIES = [
   "Mobiles",
@@ -20,103 +15,39 @@ const CATEGORIES = [
 ];
 
 const SUB_LINKS = [
-  {
-    label: "Today's Deals",
-    href: "/deals",
-  },
-  {
-    label: "Best Sellers",
-    href: "/best-sellers",
-  },
-  {
-    label: "New Releases",
-    href: "/new",
-  },
-  {
-    label: "Mobiles",
-    href: "/c/mobiles",
-  },
-  {
-    label: "Fashion",
-    href: "/c/fashion",
-  },
-  {
-    label: "Electronics",
-    href: "/c/electronics",
-  },
-  {
-    label: "Home & Kitchen",
-    href: "/c/home-kitchen",
-  },
-  {
-    label: "Customer Service",
-    href: "/help",
-  },
+  { label: "Today's Deals", href: "/deals" },
+  { label: "Best Sellers", href: "/best-sellers" },
+  { label: "New Releases", href: "/new" },
+  { label: "Mobiles", href: "/c/mobiles" },
+  { label: "Fashion", href: "/c/fashion" },
+  { label: "Electronics", href: "/c/electronics" },
+  { label: "Home & Kitchen", href: "/c/home-kitchen" },
+  { label: "Customer Service", href: "/help" },
 ];
 
 const ACCOUNT_LINKS = [
-  {
-    label: "Your Account",
-    href: "/account",
-  },
-  {
-    label: "Your Orders",
-    href: "/orders",
-  },
-  {
-    label: "Wishlist",
-    href: "/wishlist",
-  },
-  {
-    label: "Saved Addresses",
-    href: "/addresses",
-  },
+  { label: "Your Account", href: "/account" },
+  { label: "Your Orders", href: "/orders" },
+  { label: "Wishlist", href: "/wishlist" },
+  { label: "Saved Addresses", href: "/addresses" },
 ];
 
 const ADMIN_LINKS = [
-  {
-    label: "Dashboard",
-    href: "/admin",
-  },
-  {
-    label: "Manage Products",
-    href: "/admin/products",
-  },
-  {
-    label: "Manage Orders",
-    href: "/admin/orders",
-  },
-  {
-    label: "Manage Users",
-    href: "/admin/users",
-  },
-  {
-    label: "Customer Support",
-    href: "/admin/support",
-  },
+  { label: "Dashboard", href: "/admin" },
+  { label: "Manage Products", href: "/admin/products" },
+  { label: "Manage Orders", href: "/admin/orders" },
+  { label: "Manage Users", href: "/admin/users" },
+  { label: "Customer Support", href: "/admin/support" },
 ];
 
 const ICONS = {
-  search:
-    "M11 4a7 7 0 1 0 0 14 7 7 0 0 0-0-14Zm9 16-4-4",
-
-  cart:
-    "M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.7L20 8H6.2M9 20h.01M17 20h.01",
-
-  menu:
-    "M4 7h16M4 12h16M4 17h16",
-
-  close:
-    "M6 6l12 12M18 6 6 18",
-
-  pin:
-    "M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Zm0-7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z",
-
-  chevron:
-    "M6 9l6 6 6-6",
-
-  user:
-    "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0",
+  search: "M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm9 16-4-4",
+  cart: "M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.7L20 8H6.2M9 20h.01M17 20h.01",
+  menu: "M4 7h16M4 12h16M4 17h16",
+  close: "M6 6l12 12M18 6 6 18",
+  pin: "M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10Zm0-7.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z",
+  chevron: "M6 9l6 6 6-6",
+  user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0",
 };
 
 function Icon({ name, size = 22 }) {
@@ -137,10 +68,6 @@ function Icon({ name, size = 22 }) {
   );
 }
 
-/* =========================================================
-   SEARCH HELPERS
-========================================================= */
-
 const normalizeText = (value = "") =>
   String(value)
     .toLowerCase()
@@ -150,82 +77,46 @@ const normalizeText = (value = "") =>
 
 const getSuggestionScore = (product, searchTerm) => {
   const queryText = normalizeText(searchTerm);
-
   if (!queryText) return 0;
 
   const name = normalizeText(product.name);
   const category = normalizeText(product.category);
-
   let score = 0;
 
-  // Exact beginning match
-  if (name.startsWith(queryText)) {
-    score += 100;
-  }
+  if (name.startsWith(queryText)) score += 100;
+  if (name.includes(queryText)) score += 70;
+  if (category.includes(queryText)) score += 35;
 
-  // Name contains query
-  if (name.includes(queryText)) {
-    score += 70;
-  }
-
-  // Category contains query
-  if (category.includes(queryText)) {
-    score += 35;
-  }
-
-  // Word-level match
   const queryWords = queryText.split(" ");
   const nameWords = name.split(" ");
 
   queryWords.forEach((word) => {
     nameWords.forEach((nameWord) => {
-      if (nameWord.startsWith(word)) {
-        score += 15;
-      }
+      if (nameWord.startsWith(word)) score += 15;
     });
   });
 
-  // Small typo tolerance
   const compactQuery = queryText.replace(/\s/g, "");
   const compactName = name.replace(/\s/g, "");
 
-  if (
-    compactQuery.length >= 3 &&
-    compactName.length >= 3
-  ) {
+  if (compactQuery.length >= 3 && compactName.length >= 3) {
     let matchedChars = 0;
     let startIndex = 0;
 
     for (const char of compactQuery) {
-      const foundIndex = compactName.indexOf(
-        char,
-        startIndex
-      );
-
+      const foundIndex = compactName.indexOf(char, startIndex);
       if (foundIndex !== -1) {
         matchedChars += 1;
         startIndex = foundIndex + 1;
       }
     }
 
-    const ratio =
-      matchedChars / compactQuery.length;
-
-    if (ratio >= 0.75) {
-      score += 20;
-    }
+    if (matchedChars / compactQuery.length >= 0.75) score += 20;
   }
 
   return score;
 };
 
-/**
- * Props
- * user       : null or logged-in user
- * cartCount  : cart item count
- * onLogout   : logout callback
- * onSearch   : { query, category }
- */
 export default function Navbar({
   user = null,
   cartCount = 0,
@@ -234,75 +125,35 @@ export default function Navbar({
   onSearch = () => {},
 }) {
   const routeLocation = useLocation();
-
   const searchBoxRef = useRef(null);
 
-  const [deliveryAddress, setDeliveryAddress] =
-    useState(null);
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const [sideOpen, setSideOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("All");
+  const [allProducts, setAllProducts] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
 
-  const [sideOpen, setSideOpen] =
-    useState(false);
-
-  const [query, setQuery] =
-    useState("");
-
-  const [category, setCategory] =
-    useState("All");
-
-  /* ---------- autocomplete state ---------- */
-
-  const [allProducts, setAllProducts] =
-    useState([]);
-
-  const [suggestions, setSuggestions] =
-    useState([]);
-
-  const [showSuggestions, setShowSuggestions] =
-    useState(false);
-
-  const [suggestionsLoading, setSuggestionsLoading] =
-    useState(false);
-
-  const [activeSuggestion, setActiveSuggestion] =
-    useState(-1);
-
-  const isAdmin =
-    user?.role === "admin";
-
-  const firstName =
-    user
-      ? user.name.split(" ")[0]
-      : "";
-
-  /* =========================================================
-     LOAD PRODUCTS FOR AUTOCOMPLETE
-  ========================================================= */
+  const isAdmin = user?.role === "admin";
+  const firstName = user ? user.name.split(" ")[0] : "";
 
   useEffect(() => {
     const loadSearchProducts = async () => {
       try {
-        const response =
-          await api.get("/products");
-
+        const response = await api.get("/products");
         if (response.data?.success) {
-          setAllProducts(
-            response.data.products || []
-          );
+          setAllProducts(response.data.products || []);
         }
       } catch (error) {
-        console.error(
-          "Navbar search products error:",
-          error
-        );
+        console.error("Navbar search products error:", error);
       }
     };
 
     loadSearchProducts();
   }, []);
-
-  /* =========================================================
-     DEBOUNCED AUTOCOMPLETE
-  ========================================================= */
 
   useEffect(() => {
     const term = query.trim();
@@ -318,312 +169,152 @@ export default function Navbar({
     setSuggestionsLoading(true);
 
     const timer = setTimeout(() => {
-      const normalizedQuery =
-        normalizeText(term);
+      const normalizedQuery = normalizeText(term);
 
-      const filtered =
-        allProducts
-          .filter((product) => {
-            if (
-              category !== "All" &&
-              normalizeText(
-                product.category
-              ) !==
-                normalizeText(category)
-            ) {
-              return false;
-            }
+      const filtered = allProducts
+        .filter((product) => {
+          if (
+            category !== "All" &&
+            normalizeText(product.category) !== normalizeText(category)
+          ) {
+            return false;
+          }
 
-            return (
-              normalizeText(
-                product.name
-              ).includes(
-                normalizedQuery
-              ) ||
-              normalizeText(
-                product.category
-              ).includes(
-                normalizedQuery
-              ) ||
-              getSuggestionScore(
-                product,
-                term
-              ) > 15
-            );
-          })
-          .map((product) => ({
-            product,
-            score:
-              getSuggestionScore(
-                product,
-                term
-              ),
-          }))
-          .sort(
-            (a, b) =>
-              b.score - a.score
-          )
-          .slice(0, 6);
+          return (
+            normalizeText(product.name).includes(normalizedQuery) ||
+            normalizeText(product.category).includes(normalizedQuery) ||
+            getSuggestionScore(product, term) > 15
+          );
+        })
+        .map((product) => ({
+          product,
+          score: getSuggestionScore(product, term),
+        }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6);
 
-      setSuggestions(
-        filtered.map(
-          (item) => item.product
-        )
-      );
-
+      setSuggestions(filtered.map((item) => item.product));
       setSuggestionsLoading(false);
       setShowSuggestions(true);
       setActiveSuggestion(-1);
     }, 250);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [
-    query,
-    category,
-    allProducts,
-  ]);
-
-  /* =========================================================
-     CLOSE AUTOCOMPLETE ON OUTSIDE CLICK
-  ========================================================= */
+    return () => clearTimeout(timer);
+  }, [query, category, allProducts]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
         searchBoxRef.current &&
-        !searchBoxRef.current.contains(
-          event.target
-        )
+        !searchBoxRef.current.contains(event.target)
       ) {
         setShowSuggestions(false);
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleOutsideClick
-    );
-
-    return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleOutsideClick
-      );
-    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
-
-  /* =========================================================
-     DRAWER
-  ========================================================= */
 
   useEffect(() => {
     if (!sideOpen) return;
 
     const onKey = (e) => {
-      if (e.key === "Escape") {
-        setSideOpen(false);
-      }
+      if (e.key === "Escape") setSideOpen(false);
     };
 
-    document.addEventListener(
-      "keydown",
-      onKey
-    );
-
-    document.body.style.overflow =
-      "hidden";
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener(
-        "keydown",
-        onKey
-      );
-
-      document.body.style.overflow =
-        "";
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
     };
   }, [sideOpen]);
 
-  /* =========================================================
-     DELIVERY ADDRESS
-  ========================================================= */
-
   useEffect(() => {
-    const loadDefaultAddress =
-      async () => {
-        if (!user) {
+    const loadDefaultAddress = async () => {
+      if (!user) {
+        setDeliveryAddress(null);
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("shopora_token");
+
+        if (!token) {
           setDeliveryAddress(null);
           return;
         }
 
-        try {
-          const token =
-            localStorage.getItem(
-              "shopora_token"
-            );
+        const response = await api.get("/users/addresses", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-          if (!token) {
-            setDeliveryAddress(null);
-            return;
-          }
-
-          const response =
-            await api.get(
-              "/users/addresses",
-              {
-                headers: {
-                  Authorization:
-                    `Bearer ${token}`,
-                },
-              }
-            );
-
-          if (
-            response.data.success
-          ) {
-            const addresses =
-              response.data.addresses ||
-              [];
-
-            const defaultAddress =
-              addresses.find(
-                (item) =>
-                  item.isDefault
-              ) ||
-              addresses[0] ||
-              null;
-
-            setDeliveryAddress(
-              defaultAddress
-            );
-          }
-        } catch (error) {
-          console.error(
-            "Navbar address error:",
-            error
+        if (response.data.success) {
+          const addresses = response.data.addresses || [];
+          setDeliveryAddress(
+            addresses.find((item) => item.isDefault) || addresses[0] || null
           );
         }
-      };
+      } catch (error) {
+        console.error("Navbar address error:", error);
+      }
+    };
 
     loadDefaultAddress();
 
-    const handleAddressUpdate =
-      () => {
-        loadDefaultAddress();
-      };
+    const handleAddressUpdate = () => loadDefaultAddress();
 
-    window.addEventListener(
-      "shoporaAddressUpdated",
-      handleAddressUpdate
-    );
+    window.addEventListener("shoporaAddressUpdated", handleAddressUpdate);
 
-    return () => {
+    return () =>
       window.removeEventListener(
         "shoporaAddressUpdated",
         handleAddressUpdate
       );
-    };
-  }, [
-    user,
-    routeLocation.pathname,
-  ]);
-
-  /* =========================================================
-     SEARCH
-  ========================================================= */
+  }, [user, routeLocation.pathname]);
 
   const submitSearch = (e) => {
     e.preventDefault();
-
-    const term =
-      query.trim();
-
-    if (!term) {
-      return;
-    }
+    const term = query.trim();
+    if (!term) return;
 
     setShowSuggestions(false);
     setActiveSuggestion(-1);
-
-    onSearch({
-      query: term,
-      category,
-    });
+    onSearch({ query: term, category });
   };
 
-  const selectSuggestion = (
-    product
-  ) => {
+  const selectSuggestion = (product) => {
     if (!product) return;
 
-    const nextQuery =
-      product.name || "";
-
+    const nextQuery = product.name || "";
     setQuery(nextQuery);
     setShowSuggestions(false);
     setActiveSuggestion(-1);
-
-    onSearch({
-      query: nextQuery,
-      category,
-    });
+    onSearch({ query: nextQuery, category });
   };
 
-  /* =========================================================
-     KEYBOARD NAVIGATION
-  ========================================================= */
+  const handleSearchKeyDown = (e) => {
+    if (!showSuggestions) return;
 
-  const handleSearchKeyDown = (
-    e
-  ) => {
-    if (!showSuggestions) {
-      return;
-    }
-
-    if (
-      e.key === "ArrowDown"
-    ) {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
-
       setActiveSuggestion((current) =>
-        Math.min(
-          current + 1,
-          suggestions.length - 1
-        )
+        Math.min(current + 1, suggestions.length - 1)
       );
-
       return;
     }
 
-    if (
-      e.key === "ArrowUp"
-    ) {
+    if (e.key === "ArrowUp") {
       e.preventDefault();
-
-      setActiveSuggestion((current) =>
-        Math.max(
-          current - 1,
-          -1
-        )
-      );
-
+      setActiveSuggestion((current) => Math.max(current - 1, -1));
       return;
     }
 
-    if (
-      e.key === "Enter" &&
-      activeSuggestion >= 0
-    ) {
+    if (e.key === "Enter" && activeSuggestion >= 0) {
       e.preventDefault();
-
-      const product =
-        suggestions[
-          activeSuggestion
-        ];
-
-      selectSuggestion(product);
+      selectSuggestion(suggestions[activeSuggestion]);
     }
 
     if (e.key === "Escape") {
@@ -632,679 +323,306 @@ export default function Navbar({
     }
   };
 
-  /* =========================================================
-     LOGOUT
-  ========================================================= */
-
   const logout = () => {
     setSideOpen(false);
     onLogout();
   };
 
   return (
-    <header className="sp">
-      {/* =====================================================
-          TOP ROW
-      ===================================================== */}
-
-      <div className="sp-top">
+    <header className="shopora-nav">
+      <div className="sn-main">
         <button
-          className="sp-burger"
-          onClick={() =>
-            setSideOpen(true)
-          }
+          className="sn-menu"
+          onClick={() => setSideOpen(true)}
           aria-label="Open menu"
         >
-          <Icon
-            name="menu"
-            size={26}
-          />
+          <Icon name="menu" size={24} />
         </button>
 
-        <a
-          href="/"
-          className="sp-logo"
-          aria-label="Shopora home"
-        >
-          shopora
-          <span>.</span>
+        <a href="/" className="sn-logo" aria-label="Shopora home">
+          shopora<span>.</span>
         </a>
 
-        <a
-          href="/addresses"
-          className="sp-deliver"
-        >
-          <Icon
-            name="pin"
-            size={20}
-          />
-
+        <a href="/addresses" className="sn-delivery">
+          <span className="sn-delivery-icon">
+            <Icon name="pin" size={18} />
+          </span>
           <span>
-            <small>
-              Deliver to
-            </small>
-
+            <small>Deliver to</small>
             <b>
               {deliveryAddress
                 ? `${deliveryAddress.city} - ${deliveryAddress.pincode}`
                 : user
                 ? "Add address"
-                : "India"}
+                : location}
             </b>
           </span>
         </a>
 
-        {/* =================================================
-            SEARCH
-        ================================================= */}
-
         <form
           ref={searchBoxRef}
-          className="sp-search"
+          className="sn-search"
           role="search"
           onSubmit={submitSearch}
         >
-          <label
-            htmlFor="sp-cat"
-            className="sp-sr"
-          >
-            Search category
-          </label>
-
           <select
-            id="sp-cat"
             value={category}
+            aria-label="Search category"
             onChange={(e) => {
-              setCategory(
-                e.target.value
-              );
+              setCategory(e.target.value);
               setActiveSuggestion(-1);
             }}
           >
-            <option>
-              All
-            </option>
-
-            {CATEGORIES.map(
-              (c) => (
-                <option
-                  key={c}
-                >
-                  {c}
-                </option>
-              )
-            )}
+            <option>All</option>
+            {CATEGORIES.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
           </select>
 
-          <label
-            htmlFor="sp-q"
-            className="sp-sr"
-          >
-            Search Shopora
-          </label>
-
           <input
-            id="sp-q"
             type="search"
-            placeholder="Search Shopora"
+            placeholder="Search products, brands & more"
             value={query}
             autoComplete="off"
             onFocus={() => {
-              if (
-                query.trim()
-              ) {
-                setShowSuggestions(
-                  true
-                );
-              }
+              if (query.trim()) setShowSuggestions(true);
             }}
-            onKeyDown={
-              handleSearchKeyDown
-            }
-            onChange={(e) =>
-              setQuery(
-                e.target.value
-              )
-            }
+            onKeyDown={handleSearchKeyDown}
+            onChange={(e) => setQuery(e.target.value)}
           />
 
-          <button
-            type="submit"
-            aria-label="Search"
-          >
-            <Icon
-              name="search"
-              size={22}
-            />
+          <button type="submit" aria-label="Search">
+            <Icon name="search" size={21} />
           </button>
 
-          {/* =================================================
-              AUTOCOMPLETE DROPDOWN
-          ================================================= */}
+          {showSuggestions && query.trim() && (
+            <div className="sn-suggestions">
+              {suggestionsLoading ? (
+                <div className="sn-suggestion-status">Searching...</div>
+              ) : suggestions.length > 0 ? (
+                <>
+                  <div className="sn-suggestion-title">Suggested products</div>
+                  {suggestions.map((product, index) => {
+                    const productId = product._id || product.id;
 
-          {showSuggestions &&
-            query.trim() && (
-              <div className="sp-search-suggestions">
-                {suggestionsLoading ? (
-                  <div className="sp-search-loading">
-                    <span className="sp-search-mini-spinner" />
-                    Searching...
-                  </div>
-                ) : suggestions.length >
-                  0 ? (
-                  <>
-                    <div className="sp-search-suggestion-title">
-                      Suggested products
-                    </div>
-
-                    {suggestions.map(
-                      (
-                        product,
-                        index
-                      ) => {
-                        const productId =
-                          product._id ||
-                          product.id;
-
-                        return (
-                          <button
-                            type="button"
-                            key={
-                              productId ||
-                              index
-                            }
-                            className={`sp-search-suggestion ${
-                              activeSuggestion ===
-                              index
-                                ? "sp-search-suggestion-active"
-                                : ""
-                            }`}
-                            onMouseDown={(
-                              e
-                            ) => {
-                              e.preventDefault();
-                              selectSuggestion(
-                                product
-                              );
-                            }}
-                          >
-                            <span className="sp-search-suggestion-icon">
-                              <Icon
-                                name="search"
-                                size={16}
-                              />
-                            </span>
-
-                            <span className="sp-search-suggestion-content">
-                              <strong>
-                                {
-                                  product.name
-                                }
-                              </strong>
-
-                              <small>
-                                {product.category ||
-                                  "Product"}
-                              </small>
-                            </span>
-
-                            <span className="sp-search-suggestion-arrow">
-                              →
-                            </span>
-                          </button>
-                        );
-                      }
-                    )}
-
-                    <button
-                      type="button"
-                      className="sp-search-see-all"
-                      onMouseDown={(
-                        e
-                      ) => {
-                        e.preventDefault();
-
-                        setShowSuggestions(
-                          false
-                        );
-
-                        onSearch({
-                          query:
-                            query.trim(),
-                          category,
-                        });
-                      }}
-                    >
-                      Search for "
-                      {query.trim()}"
-                    </button>
-                  </>
-                ) : (
-                  <div className="sp-search-no-results">
-                    <strong>
-                      No direct matches
-                    </strong>
-
-                    <span>
-                      Search anyway to find more products
-                      from Shopora and the web.
-                    </span>
-
-                    <button
-                      type="button"
-                      onMouseDown={(
-                        e
-                      ) => {
-                        e.preventDefault();
-
-                        setShowSuggestions(
-                          false
-                        );
-
-                        onSearch({
-                          query:
-                            query.trim(),
-                          category,
-                        });
-                      }}
-                    >
-                      Search anyway →
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                    return (
+                      <button
+                        type="button"
+                        key={productId || index}
+                        className={`sn-suggestion ${
+                          activeSuggestion === index ? "is-active" : ""
+                        }`}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          selectSuggestion(product);
+                        }}
+                      >
+                        <span className="sn-suggestion-icon">
+                          <Icon name="search" size={15} />
+                        </span>
+                        <span>
+                          <strong>{product.name}</strong>
+                          <small>{product.category || "Product"}</small>
+                        </span>
+                        <b>→</b>
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    className="sn-see-all"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setShowSuggestions(false);
+                      onSearch({ query: query.trim(), category });
+                    }}
+                  >
+                    Search for "{query.trim()}"
+                  </button>
+                </>
+              ) : (
+                <div className="sn-no-results">
+                  <strong>No direct matches</strong>
+                  <span>Search anyway to find more products.</span>
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setShowSuggestions(false);
+                      onSearch({ query: query.trim(), category });
+                    }}
+                  >
+                    Search anyway →
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </form>
 
-        {/* =================================================
-            ACCOUNT
-        ================================================= */}
-
-        <div className="sp-account">
-          <button
-            className="sp-tile"
-            aria-haspopup="true"
-          >
-            <small>
-              Hello,{" "}
-              {user
-                ? firstName
-                : "sign in"}
-            </small>
-
-            <b>
-              Account &amp; Lists{" "}
-              <Icon
-                name="chevron"
-                size={12}
-              />
-            </b>
+        <div className="sn-account">
+          <button className="sn-action">
+            <span className="sn-action-icon">
+              <Icon name="user" size={23} />
+            </span>
+            <span className="sn-action-text">
+              <small>Hello, {user ? firstName : "sign in"}</small>
+              <b>Account</b>
+            </span>
           </button>
 
-          <span
-            className="sp-tile-icon"
-            aria-hidden="true"
-          >
-            <Icon
-              name="user"
-              size={26}
-            />
-          </span>
-
-          <div className="sp-drop">
+          <div className="sn-account-menu">
             {user ? (
-              <div className="sp-drop-head">
-                <b>
-                  Hi, {user.name}
-                </b>
-
-                {isAdmin && (
-                  <span className="sp-badge">
-                    Admin
-                  </span>
-                )}
+              <div className="sn-menu-user">
+                <strong>Hi, {user.name}</strong>
+                {isAdmin && <span>Admin</span>}
               </div>
             ) : (
-              <div className="sp-drop-head sp-drop-guest">
-                <a
-                  href="/login"
-                  className="sp-btn"
-                >
-                  Sign in
-                </a>
-
-                <p>
-                  New customer?{" "}
-                  <a href="/register">
-                    Start here.
-                  </a>
-                </p>
+              <div className="sn-menu-user sn-guest">
+                <a href="/login">Sign in</a>
+                <small>
+                  New customer? <a href="/register">Start here.</a>
+                </small>
               </div>
             )}
 
-            <div className="sp-drop-cols">
+            <div className="sn-menu-grid">
               <div>
-                <h4>
-                  Your account
-                </h4>
-
-                <ul>
-                  {ACCOUNT_LINKS.map(
-                    (l) => (
-                      <li
-                        key={l.href}
-                      >
-                        <a
-                          href={
-                            user
-                              ? l.href
-                              : "/login"
-                          }
-                        >
-                          {l.label}
-                        </a>
-                      </li>
-                    )
-                  )}
-                </ul>
+                <h4>Your account</h4>
+                {ACCOUNT_LINKS.map((item) => (
+                  <a key={item.href} href={user ? item.href : "/login"}>
+                    {item.label}
+                  </a>
+                ))}
               </div>
 
               {isAdmin && (
                 <div>
-                  <h4>
-                    Admin
-                  </h4>
-
-                  <ul>
-                    {ADMIN_LINKS.map(
-                      (l) => (
-                        <li
-                          key={
-                            l.href
-                          }
-                        >
-                          <a
-                            href={
-                              l.href
-                            }
-                          >
-                            {l.label}
-                          </a>
-                        </li>
-                      )
-                    )}
-                  </ul>
+                  <h4>Admin</h4>
+                  {ADMIN_LINKS.map((item) => (
+                    <a key={item.href} href={item.href}>
+                      {item.label}
+                    </a>
+                  ))}
                 </div>
               )}
             </div>
 
             {user && (
-              <button
-                className="sp-signout"
-                onClick={logout}
-              >
+              <button className="sn-signout" onClick={logout}>
                 Sign out
               </button>
             )}
           </div>
         </div>
 
-        <a
-          href="/orders"
-          className="sp-tile sp-returns"
-        >
-          <small>
-            Returns
-          </small>
+        <a href="/wishlist" className="sn-icon-action" aria-label="Wishlist">
+          <span>♡</span>
+          <small>Wishlist</small>
+        </a>
 
-          <b>
-            &amp; Orders
-          </b>
+        <a href="/orders" className="sn-orders">
+          <small>Track</small>
+          <b>Orders</b>
         </a>
 
         <a
           href="/cart"
-          className="sp-cart"
+          className="sn-cart"
           aria-label={`Cart, ${cartCount} items`}
         >
-          <span className="sp-cart-icon">
-            <Icon
-              name="cart"
-              size={32}
-            />
-
-            <em>
-              {cartCount}
-            </em>
+          <span className="sn-cart-icon">
+            <Icon name="cart" size={27} />
+            <em>{cartCount}</em>
           </span>
-
-          <b>
-            Cart
-          </b>
+          <b>Cart</b>
         </a>
       </div>
 
-      {/* =====================================================
-          SUB ROW
-      ===================================================== */}
+      <nav className="sn-nav" aria-label="Main navigation">
+        <div className="sn-nav-inner">
+          <button className="sn-all" onClick={() => setSideOpen(true)}>
+            <Icon name="menu" size={18} />
+            Categories
+          </button>
 
-      <nav
-        className="sp-sub"
-        aria-label="Main"
-      >
-        <button
-          className="sp-all"
-          onClick={() =>
-            setSideOpen(true)
-          }
-        >
-          <Icon
-            name="menu"
-            size={20}
-          />{" "}
-          All
-        </button>
-
-        <ul>
-          {SUB_LINKS.map(
-            (l) => (
-              <li
-                key={l.href}
-              >
-                <a
-                  href={l.href}
-                >
-                  {l.label}
-                </a>
-              </li>
-            )
-          )}
-
-          {isAdmin && (
-            <li>
-              <a
-                href="/admin"
-                className="sp-sub-admin"
-              >
+          <div className="sn-links">
+            {SUB_LINKS.map((item) => (
+              <a key={item.href} href={item.href}>
+                {item.label}
+              </a>
+            ))}
+            {isAdmin && (
+              <a href="/admin" className="sn-admin-link">
                 Admin Panel
               </a>
-            </li>
-          )}
-        </ul>
+            )}
+          </div>
+        </div>
       </nav>
 
-      {/* =====================================================
-          SIDE DRAWER
-      ===================================================== */}
-
       <div
-        className={`sp-overlay ${
-          sideOpen
-            ? "sp-overlay--on"
-            : ""
-        }`}
-        onClick={() =>
-          setSideOpen(false)
-        }
+        className={`sn-overlay ${sideOpen ? "is-open" : ""}`}
+        onClick={() => setSideOpen(false)}
       />
 
-      <aside
-        className={`sp-side ${
-          sideOpen
-            ? "sp-side--open"
-            : ""
-        }`}
-        aria-label="Menu"
-        aria-hidden={!sideOpen}
-      >
-        <div className="sp-side-head">
-          <Icon
-            name="user"
-            size={26}
-          />
-
-          <b>
-            Hello,{" "}
-            {user
-              ? user.name
-              : "sign in"}
-          </b>
-
-          {isAdmin && (
-            <span className="sp-badge">
-              Admin
+      <aside className={`sn-drawer ${sideOpen ? "is-open" : ""}`}>
+        <div className="sn-drawer-head">
+          <div>
+            <span className="sn-drawer-user">
+              <Icon name="user" size={22} />
             </span>
-          )}
+            <strong>Hello, {user ? user.name : "sign in"}</strong>
+            {isAdmin && <em>Admin</em>}
+          </div>
 
-          <button
-            onClick={() =>
-              setSideOpen(false)
-            }
-            aria-label="Close menu"
-          >
-            <Icon
-              name="close"
-              size={22}
-            />
+          <button onClick={() => setSideOpen(false)} aria-label="Close menu">
+            <Icon name="close" size={22} />
           </button>
         </div>
 
-        <div className="sp-side-body">
-          <h3>
-            Shop by category
-          </h3>
+        <div className="sn-drawer-body">
+          <h3>Shop by category</h3>
+          {CATEGORIES.map((categoryName) => (
+            <a
+              key={categoryName}
+              href={`/c/${categoryName
+                .toLowerCase()
+                .replace(/ & /g, "-")
+                .replace(/\s+/g, "-")}`}
+            >
+              {categoryName}
+            </a>
+          ))}
 
-          <ul>
-            {CATEGORIES.map(
-              (c) => (
-                <li
-                  key={c}
-                >
-                  <a
-                    href={`/c/${c
-                      .toLowerCase()
-                      .replace(
-                        / & /g,
-                        "-"
-                      )}`}
-                  >
-                    {c}
-                  </a>
-                </li>
-              )
-            )}
-          </ul>
-
-          <h3>
-            Programs &amp; features
-          </h3>
-
-          <ul>
-            <li>
-              <a href="/deals">
-                Today's Deals
-              </a>
-            </li>
-
-            <li>
-              <a href="/best-sellers">
-                Best Sellers
-              </a>
-            </li>
-          </ul>
+          <h3>Programs & features</h3>
+          <a href="/deals">Today's Deals</a>
+          <a href="/best-sellers">Best Sellers</a>
+          <a href="/new">New Releases</a>
 
           {isAdmin && (
             <>
-              <h3>
-                Admin
-              </h3>
-
-              <ul>
-                {ADMIN_LINKS.map(
-                  (l) => (
-                    <li
-                      key={
-                        l.href
-                      }
-                    >
-                      <a
-                        href={
-                          l.href
-                        }
-                      >
-                        {l.label}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
+              <h3>Admin</h3>
+              {ADMIN_LINKS.map((item) => (
+                <a key={item.href} href={item.href}>
+                  {item.label}
+                </a>
+              ))}
             </>
           )}
 
-          <h3>
-            Help &amp; settings
-          </h3>
+          <h3>Help & settings</h3>
+          <a href={user ? "/account" : "/login"}>Your Account</a>
+          <a href="/orders">Your Orders</a>
+          <a href="/help">Customer Service</a>
 
-          <ul>
-            <li>
-              <a
-                href={
-                  user
-                    ? "/account"
-                    : "/login"
-                }
-              >
-                Your Account
-              </a>
-            </li>
-
-            <li>
-              <a href="/orders">
-                Your Orders
-              </a>
-            </li>
-
-            <li>
-              <a href="/help">
-                Customer Service
-              </a>
-            </li>
-
-            <li>
-              {user ? (
-                <button
-                  className="sp-side-link"
-                  onClick={logout}
-                >
-                  Sign out
-                </button>
-              ) : (
-                <a href="/login">
-                  Sign in
-                </a>
-              )}
-            </li>
-          </ul>
+          {user ? (
+            <button className="sn-drawer-signout" onClick={logout}>
+              Sign out
+            </button>
+          ) : (
+            <a href="/login">Sign in</a>
+          )}
         </div>
       </aside>
     </header>
