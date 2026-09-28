@@ -4440,3 +4440,31 @@ ul {
   .footer-payment { gap: 5px; }
   .footer-payment span { width: 100%; margin-bottom: 2px; }
 }
+
+/* =========================================================
+   REMOVE TOP BLANK SPACE ABOVE SHOPORA NAVBAR
+   ========================================================= */
+
+html,
+body,
+#root {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 100% !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.shopora-nav {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.shopora-nav::before {
+  display: none !important;
+  content: none !important;
+}
