@@ -1,18 +1,4 @@
-/* =====================================================================
-   SHOPORA — PRODUCTION STYLESHEET
-   ---------------------------------------------------------------------
-   1.  Design tokens          8.  Product / Search / External detail
-   2.  Reset & base           9.  Checkout & payment modal
-   3.  Shared components     10.  Orders & order details
-   4.  Navbar (sticky)       11.  Admin (products/orders/users/support)
-   5.  Home                  12.  Category / collection / support / gift
-   6.  Cart                  13.  Addresses / account / wishlist
-   7.  Login / Register      14.  Footer, motion & accessibility
-   Class names are unchanged — no JSX edits required.
-   To re-theme the whole site, edit only the tokens in section 1.
-   ===================================================================== */
 
-/* ============================ 1. TOKENS ============================ */
 :root {
   /* Brand */
   --brand: #f79009;
@@ -621,7 +607,7 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
   .sn-action { min-width: 0; padding: 4px 0; }
   .sn-action-text { max-width: 84px; }
   .sn-action-text small { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sn-action-text b { display: none; }
+ 
   .sn-account-menu { top: 100%; right: 12px; }
 
   .sn-nav { background: var(--surface); border-bottom: 1px solid var(--line); }
@@ -645,7 +631,7 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
   .sn-links a { padding: 7px 12px; font-size: 12px; }
 }
 @media (max-width: 360px) {
-  .sn-action-text { display: none; }
+  
   .sn-menu { width: 40px; height: 40px; }
   .sn-logo { font-size: 20px; }
 }
@@ -1865,4 +1851,27 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
 @media print {
   .shopora-nav, .shopora-footer, .sn-overlay, .sn-drawer { display: none !important; }
   body { background: #fff; }
+}
+
+/* Mobile: show "Hello, Abhay / Account" next to the icon */
+@media (max-width: 900px) {
+  .sn-action-text { display: flex; max-width: 110px; }
+  .sn-action-text small,
+  .sn-action-text b {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sn-action-text b { font-size: 13px; }
+}
+@media (max-width: 480px) {
+  .sn-action-text { max-width: 88px; }
+  .sn-action-text small { font-size: 10px; }
+  .sn-action-text b { font-size: 12px; }
+}
+@media (max-width: 360px) {
+  .sn-action-text { max-width: 66px; }
+  .sn-logo { font-size: 19px; }
 }
