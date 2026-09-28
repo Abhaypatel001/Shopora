@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../Services/api";
-import "./Navbar.css";
+
 
 const CATEGORIES = [
   "Mobiles",
