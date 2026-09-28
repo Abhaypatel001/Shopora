@@ -60,46 +60,28 @@ ul {
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  overflow-x: clip;
-  /* Reserve space for the fixed Shopora navbar so page content
-     never slides underneath it. Grows on smaller screens because
-     the navbar wraps into two rows there. */
+  overflow-x: visible;
   padding-top: 104px;
 }
 
 @media (max-width: 900px) {
-  #root { padding-top: 145px; }
-}
-
-:focus-visible {
-  outline: 2px solid #f79009;
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  #root {
+    padding-top: 145px;
   }
 }
-/* =========================================================
-   SHOPORA — PROFESSIONAL CUSTOM NAVBAR
-   Amazon-style functionality, completely different visual design
-========================================================= */
 
 .shopora-nav {
-  position: sticky;
-  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
+  z-index: 99999;
   background: #ffffff;
   color: #111827;
   border-bottom: 1px solid #e8edf3;
   font-family: Manrope, Inter, system-ui, sans-serif;
 }
-
 .sn-main {
   min-height: 76px;
   max-width: 1500px;
@@ -3619,16 +3601,3 @@ ul {
 }
 
 
-/* ===== FIX: SPACE ABOVE SHOPORA NAVBAR ===== */
-
-html,
-body,
-#root {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.shopora-nav {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
