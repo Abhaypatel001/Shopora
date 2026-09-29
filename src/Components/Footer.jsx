@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-
 /* ---------- Data (yahin se links/contact edit karo) ---------- */
 const SHOP_LINKS = [
   { label: "Today's Deals", href: "/sale" },
   { label: "Best Sellers", href: "/best-sellers" },
   { label: "New Releases", href: "/new" },
-  { label: "Mobiles", href: "/mobiles" },
-  { label: "Fashion", href: "/fashion" },
-  { label: "Electronics", href: "/electronics" },
-  { label: "Home & Kitchen", href: "/home-kitchen" },
+  { label: "Mobiles", href: "/c/mobiles" },
+  { label: "Fashion", href: "/c/fashion" },
+  { label: "Electronics", href: "/c/electronics" },
+  { label: "Home & Kitchen", href: "/c/home-kitchen" },
 ];
 
 const CARE_LINKS = [
@@ -28,9 +26,9 @@ const LEGAL_LINKS = [
 const PAYMENTS = ["VISA", "MASTERCARD", "UPI", "RUPAY", "COD"];
 
 const CONTACT = {
-  address: "123 Commerce Street, Your City, Your State",
-  phone: "+91 00000 00000",
-  email: "support@shopora.com",
+  address: "123 Commerce Street, Fatehpur, Uttar Pradesh",
+  phone: "+91 88587 01053",
+  email: "abhayjipatel9821@gmail.com",
   hours: "Mon – Sat, 10:00 AM – 7:00 PM",
 };
 
@@ -62,7 +60,6 @@ const ICONS = {
     "M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-1 15-4-4 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z",
   support:
     "M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h2v-8H5v-2a7 7 0 0 1 14 0v2h-3v8h3v1h-6v2h6a3 3 0 0 0 3-3v-8a9 9 0 0 0-9-9z",
-  arrowUp: "M12 4 4 12l1.4 1.4L11 7.8V20h2V7.8l5.6 5.6L20 12l-8-8z",
 };
 
 const SOCIALS = [
@@ -81,16 +78,6 @@ const TRUST = [
 
 /* ---------- Component ---------- */
 export default function Footer() {
-  const [showTop, setShowTop] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
   return (
     <>
       <footer className="sf-footer" id="site-footer">
@@ -190,16 +177,6 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-
-      {/* Back to top */}
-      <button
-        type="button"
-        className={`sf-top${showTop ? " show" : ""}`}
-        onClick={scrollToTop}
-        aria-label="Back to top"
-      >
-        <Icon d={ICONS.arrowUp} />
-      </button>
     </>
   );
 }
