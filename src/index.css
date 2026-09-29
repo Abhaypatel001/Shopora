@@ -836,6 +836,222 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
     background: rgba(245, 158, 11, 0.20);
   }
 }
+/* ==========================================================
+   SHOPORA — Navbar hover / click / focus effects
+   Isse index.css ke bilkul END mein paste karo
+   (navbar-premium.css aur navbar-mobile-fix.css ke BAAD).
+
+   - Hover effects sirf mouse wale devices par (@media hover: hover),
+     taaki mobile par tap ke baad hover "chipka" na rahe.
+   - Click (:active) par halka press-down effect.
+   - Keyboard (Tab) se chalne par saaf orange focus ring.
+   ========================================================== */
+
+/* ---------- Base: smooth + no ugly mobile tap flash ---------- */
+.shopora-nav a,
+.shopora-nav button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shopora-nav .sn-menu,
+.shopora-nav .sn-logo,
+.shopora-nav .sn-delivery,
+.shopora-nav .sn-action,
+.shopora-nav .sn-icon-action,
+.shopora-nav .sn-orders,
+.shopora-nav .sn-cart,
+.shopora-nav .sn-all,
+.shopora-nav .sn-links a,
+.shopora-nav .sn-signout,
+.shopora-nav .sn-drawer-head button {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.18s ease,
+    filter 0.25s ease,
+    text-shadow 0.25s ease;
+}
+
+/* ---------- Keyboard focus ring ---------- */
+.shopora-nav a:focus-visible,
+.shopora-nav button:focus-visible,
+.shopora-nav select:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* ---------- Click / press feedback (touch + mouse) ---------- */
+.shopora-nav .sn-menu:active,
+.shopora-nav .sn-drawer-head button:active { transform: scale(0.92); }
+
+.shopora-nav .sn-action:active,
+.shopora-nav .sn-icon-action:active,
+.shopora-nav .sn-orders:active,
+.shopora-nav .sn-cart:active,
+.shopora-nav .sn-delivery:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.20);
+}
+
+.shopora-nav .sn-search > button[type="submit"]:active { transform: scale(0.93); }
+.shopora-nav .sn-all:active { transform: scale(0.96); filter: brightness(0.95); }
+.shopora-nav .sn-signout:active { transform: scale(0.98); }
+
+/* ---------- Hover (sirf mouse wale devices par) ---------- */
+@media (hover: hover) {
+
+  /* logo glow */
+  .shopora-nav .sn-logo:hover {
+    text-shadow: 0 0 22px rgba(245, 158, 11, 0.55);
+  }
+
+  /* deliver to */
+  .shopora-nav .sn-delivery {
+    border-radius: 12px;
+  }
+  .shopora-nav .sn-delivery:hover {
+    background: rgba(255, 255, 255, 0.10);
+  }
+
+  /* account: dropdown khula ho tab bhi button highlighted rahe */
+  .shopora-nav .sn-account:hover .sn-action,
+  .shopora-nav .sn-account:focus-within .sn-action {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* wishlist heart */
+  .shopora-nav .sn-icon-action span {
+    display: inline-block;
+    transition: transform 0.25s ease, color 0.25s ease;
+  }
+  .shopora-nav .sn-icon-action:hover span {
+    color: #f472b6;
+    transform: scale(1.22);
+  }
+
+  /* cart icon wiggle + badge pop */
+  .shopora-nav .sn-cart-icon svg {
+    transition: transform 0.25s ease;
+  }
+  .shopora-nav .sn-cart:hover .sn-cart-icon svg {
+    transform: rotate(-8deg) scale(1.08);
+  }
+  .shopora-nav .sn-cart-icon em {
+    transition: transform 0.25s ease;
+  }
+  .shopora-nav .sn-cart:hover .sn-cart-icon em {
+    transform: scale(1.15);
+  }
+
+  /* account dropdown links */
+  .shopora-nav .sn-menu-grid a {
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .shopora-nav .sn-menu-grid a:hover {
+    color: #c2410c;
+    background: #fff7ed;
+    transform: translateX(3px);
+  }
+  .shopora-nav .sn-menu-grid a:active {
+    background: #ffedd5;
+    transform: translateX(3px) scale(0.98);
+  }
+
+  .shopora-nav .sn-signout:hover {
+    color: #c2410c;
+    border-color: #f59e0b;
+    background: #fff7ed;
+  }
+
+  /* search suggestions */
+  .shopora-nav .sn-suggestion:hover,
+  .shopora-nav .sn-see-all:hover,
+  .shopora-nav .sn-no-results button:hover {
+    background: #fff7ed;
+  }
+
+  /* drawer */
+  .shopora-nav .sn-drawer-head button:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  .shopora-nav .sn-drawer-body a:hover {
+    color: #c2410c;
+    background: #fff7ed;
+    box-shadow: inset 3px 0 0 #f59e0b;
+  }
+}
+
+.shopora-nav .sn-suggestion.is-active { background: #fff7ed; }
+
+.shopora-nav .sn-drawer-body a {
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.shopora-nav .sn-drawer-body a:active {
+  color: #9a3412;
+  background: #ffedd5;
+  box-shadow: inset 3px 0 0 #f59e0b;
+}
+
+/* ---------- Category links: DESKTOP (animated underline) ---------- */
+@media (min-width: 1025px) {
+  .shopora-nav .sn-links a {
+    position: relative;
+  }
+
+  .shopora-nav .sn-links a::after {
+    content: "";
+    position: absolute;
+    left: 14%;
+    right: 14%;
+    bottom: 0;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(90deg, #f59e0b, #f472b6);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .shopora-nav .sn-links a:active {
+    color: #f59e0b;
+  }
+  .shopora-nav .sn-links a:active::after {
+    transform: scaleX(1);
+  }
+
+  @media (hover: hover) {
+    .shopora-nav .sn-links a:hover {
+      color: #fbbf24;
+      box-shadow: none;
+    }
+    .shopora-nav .sn-links a:hover::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* ---------- Category pills: MOBILE / TABLET (tap feedback) ---------- */
+@media (max-width: 1024px) {
+  .shopora-nav .sn-links a:active {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.28);
+    border-color: rgba(245, 158, 11, 0.6);
+    transform: scale(0.95);
+  }
+}
+
+/* ---------- Motion kam karna ho to ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .shopora-nav *,
+  .shopora-nav *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 
 
 
