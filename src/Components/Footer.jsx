@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./footer.css"; // pehle wali footer.css isi folder mein rakho
+
 
 /* ---------- Data (yahin se links/contact edit karo) ---------- */
 const SHOP_LINKS = [
