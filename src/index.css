@@ -790,6 +790,53 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
 }
 .shopora-nav .sn-drawer-head button { color: #fff; }
 .shopora-nav .sn-drawer-head em { color: var(--sn-orange-soft); }
+/* ==========================================================
+   SHOPORA — Mobile navbar fix
+   Isse index.css ke bilkul END mein paste karo
+   (navbar-premium.css ke BAAD).
+   Problem: mobile par pills aur "Deliver to" ka background halka tha,
+   aur text bhi halka set ho gaya tha, isliye dikh nahi raha tha.
+   Fix: mobile par dono ka background dark glass kar diya.
+   ========================================================== */
+
+@media (max-width: 1024px) {
+
+  /* Category pills: Today's Deals, Best Sellers, New Releases... */
+  .shopora-nav .sn-links a {
+    color: #f1f5f9;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    box-shadow: none;
+  }
+
+  .shopora-nav .sn-links a:hover,
+  .shopora-nav .sn-links a:active {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.22);
+    border-color: rgba(245, 158, 11, 0.55);
+    box-shadow: none;
+  }
+
+  .shopora-nav .sn-links a.sn-admin-link {
+    color: #fbbf24;
+    border-color: rgba(251, 191, 36, 0.45);
+  }
+
+  /* "Deliver to" strip */
+  .shopora-nav .sn-delivery {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+  }
+
+  .shopora-nav .sn-delivery small { color: #c7d2fe; }
+  .shopora-nav .sn-delivery b { color: #ffffff; }
+
+  .shopora-nav .sn-delivery-icon {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.20);
+  }
+}
+
 
 
 /* ============================== 5. HOME ============================ */
