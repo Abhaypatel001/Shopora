@@ -1,417 +1,242 @@
+import { useEffect, useState } from "react";
+import "./footer.css"; // pehle wali footer.css isi folder mein rakho
 
-import { Link } from "react-router-dom";
-
-const benefits = [
-  {
-    icon: "🚚",
-    title: "Fast & Reliable Delivery",
-    text: "Quick delivery across India",
-  },
-  {
-    icon: "🔒",
-    title: "100% Secure Payments",
-    text: "Protected & trusted checkout",
-  },
-  {
-    icon: "↩",
-    title: "Easy Returns",
-    text: "Simple & hassle-free returns",
-  },
-  {
-    icon: "💬",
-    title: "Dedicated Support",
-    text: "We're here whenever you need us",
-  },
+/* ---------- Data (yahin se links/contact edit karo) ---------- */
+const SHOP_LINKS = [
+  { label: "New Arrivals", href: "/new-arrivals" },
+  { label: "Best Sellers", href: "/best-sellers" },
+  { label: "Men", href: "/men" },
+  { label: "Women", href: "/women" },
+  { label: "Accessories", href: "/accessories" },
+  { label: "Sale", href: "/sale" },
 ];
 
-const shopLinks = [
-  ["Today's Deals", "/deals"],
-  ["Best Sellers", "/best-sellers"],
-  ["New Releases", "/new"],
-  ["Mobiles", "/c/mobiles"],
-  ["Fashion", "/c/fashion"],
-  ["Electronics", "/c/electronics"],
-  ["Home & Kitchen", "/c/home-kitchen"],
+const CARE_LINKS = [
+  { label: "My Account", href: "/account" },
+  { label: "Track Your Order", href: "/track-order" },
+  { label: "Shipping & Delivery", href: "/shipping" },
+  { label: "Returns & Refunds", href: "/returns" },
+  { label: "FAQs", href: "/faq" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
-export default function Footer({ user = null }) {
-  const scrollTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+const LEGAL_LINKS = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
+  { label: "Cookies", href: "/cookies" },
+];
+
+const PAYMENTS = ["VISA", "MASTERCARD", "UPI", "RUPAY", "COD"];
+
+const CONTACT = {
+  address: "123 Commerce Street, Your City, Your State",
+  phone: "+91 00000 00000",
+  email: "support@shopora.com",
+  hours: "Mon – Sat, 10:00 AM – 7:00 PM",
+};
+
+/* ---------- Icons ---------- */
+const Icon = ({ d }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d={d} />
+  </svg>
+);
+
+const ICONS = {
+  facebook:
+    "M13.5 22v-8.2h2.8l.4-3.3h-3.2V8.4c0-.9.3-1.6 1.6-1.6h1.7V3.9c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.5H7.4v3.3h2.8V22h3.3z",
+  instagram:
+    "M12 7.3A4.7 4.7 0 1 0 12 16.7 4.7 4.7 0 0 0 12 7.3zm0 7.7a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm5-7.9a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0zM21 8.6c-.1-1.5-.4-2.8-1.5-3.9S17 3.1 15.4 3C13.9 3 10.1 3 8.6 3 7.1 3.1 5.8 3.4 4.7 4.5S3.1 7 3 8.6C3 10.1 3 13.9 3 15.4c.1 1.5.4 2.8 1.5 3.9s2.4 1.5 3.9 1.6c1.5.1 5.3.1 6.8 0 1.5-.1 2.8-.4 3.9-1.5s1.5-2.4 1.6-3.9c.1-1.5.1-5.3 0-6.9zm-2 8.8c-.3.8-.9 1.4-1.7 1.7-1.2.5-4.1.4-5.3.4s-4.1.1-5.3-.4a3 3 0 0 1-1.7-1.7c-.5-1.2-.4-4.1-.4-5.3s-.1-4.1.4-5.3c.3-.8.9-1.4 1.7-1.7 1.2-.5 4.1-.4 5.3-.4s4.1-.1 5.3.4c.8.3 1.4.9 1.7 1.7.5 1.2.4 4.1.4 5.3s.1 4.1-.4 5.3z",
+  x: "M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z",
+  youtube:
+    "M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8zM10 15V9l5.2 3-5.2 3z",
+  pin: "M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z",
+  phone:
+    "M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1l-2.2 2.2z",
+  mail: "M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z",
+  clock:
+    "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.2 13.5-5.2-3.1V7h1.5v4.6l4.5 2.6-.8 1.3z",
+  truck:
+    "M3 6a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2h3l3 4v5h-2a3 3 0 0 1-6 0H9a3 3 0 0 1-6 0V6zm4 12.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z",
+  returns: "M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z",
+  shield:
+    "M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5l-9-4zm-1 15-4-4 1.4-1.4L11 13.2l4.6-4.6L17 10l-6 6z",
+  support:
+    "M12 2a9 9 0 0 0-9 9v7a3 3 0 0 0 3 3h2v-8H5v-2a7 7 0 0 1 14 0v2h-3v8h3v1h-6v2h6a3 3 0 0 0 3-3v-8a9 9 0 0 0-9-9z",
+  arrowUp: "M12 4 4 12l1.4 1.4L11 7.8V20h2V7.8l5.6 5.6L20 12l-8-8z",
+};
+
+const SOCIALS = [
+  { name: "Facebook", href: "#", icon: ICONS.facebook },
+  { name: "Instagram", href: "#", icon: ICONS.instagram },
+  { name: "X / Twitter", href: "#", icon: ICONS.x },
+  { name: "YouTube", href: "#", icon: ICONS.youtube },
+];
+
+const TRUST = [
+  { icon: ICONS.truck, title: "Free Shipping", text: "On orders above ₹999" },
+  { icon: ICONS.returns, title: "Easy Returns", text: "7-day hassle-free returns" },
+  { icon: ICONS.shield, title: "Secure Payments", text: "100% protected checkout" },
+  { icon: ICONS.support, title: "24/7 Support", text: "We're always here to help" },
+];
+
+/* ---------- Component ---------- */
+export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 400);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    // TODO: yahan apni API / Mailchimp / Formspree call jodo
+    console.log("Subscribed:", email);
+    setSubscribed(true);
+    setEmail("");
+    setTimeout(() => setSubscribed(false), 4000);
   };
 
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
   return (
-    <footer className="shopora-footer">
-
-      {/* =====================================================
-          BENEFITS
-      ===================================================== */}
-      <section
-        className="footer-benefits"
-        aria-label="Why shop with Shopora"
-      >
-        <div className="footer-container footer-benefits-grid">
-          {benefits.map((item) => (
-            <div
-              className="footer-benefit"
-              key={item.title}
-            >
-              <div
-                className="footer-benefit-icon"
-                aria-hidden="true"
-              >
-                {item.icon}
-              </div>
-
-              <div className="footer-benefit-content">
-                <strong>{item.title}</strong>
-                <span>{item.text}</span>
-              </div>
+    <>
+      <footer className="sf-footer" id="site-footer">
+        {/* Newsletter */}
+        <div className="sf-container sf-newsletter">
+          <div className="sf-newsletter-box">
+            <div>
+              <h3>Join the Shopora Club</h3>
+              <p>
+                Exclusive offers, new arrivals and style updates — straight to
+                your inbox.
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-
-      {/* =====================================================
-          NEWSLETTER
-      ===================================================== */}
-      <section className="footer-newsletter">
-        <div className="footer-container newsletter-inner">
-
-          <div className="newsletter-content">
-            <span className="newsletter-eyebrow">
-              STAY IN THE LOOP
-            </span>
-
-            <h2>
-              Get the latest deals
-              <span> straight to your inbox.</span>
-            </h2>
-
-            <p>
-              New arrivals, exclusive offers and shopping inspiration —
-              delivered without the noise.
-            </p>
-          </div>
-
-          <form
-            className="newsletter-form"
-            onSubmit={(event) => event.preventDefault()}
-          >
-            <div className="newsletter-input-wrap">
-              <span aria-hidden="true">✉</span>
-
+            <form className="sf-subscribe" onSubmit={handleSubscribe}>
               <input
                 type="email"
                 placeholder="Enter your email address"
                 aria-label="Email address"
-                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-            </div>
-
-            <button type="submit">
-              Subscribe
-              <span aria-hidden="true">→</span>
-            </button>
-          </form>
-
+              <button type="submit">{subscribed ? "Subscribed ✓" : "Subscribe"}</button>
+            </form>
+          </div>
         </div>
-      </section>
 
-
-      {/* =====================================================
-          MAIN FOOTER
-      ===================================================== */}
-      <section className="footer-main">
-        <div className="footer-container footer-main-grid">
-
-          {/* BRAND */}
-          <div className="footer-brand-column">
-
-            <Link
-              to="/"
-              className="footer-logo"
-              aria-label="Shopora Home"
-            >
-              shopora<span>.</span>
-            </Link>
-
-            <p className="footer-brand-text">
-              Smart shopping, better choices and a smoother way
-              to shop online.
-            </p>
-
-            <a
-              className="footer-contact"
-              href="mailto:support@shopora.com"
-            >
-              support@shopora.com
-            </a>
-
-            {/* SOCIAL */}
-            <div className="footer-social">
-              <span>Follow us</span>
-
-              <div className="footer-social-icons">
-
-                <a
-                  href="#instagram"
-                  aria-label="Instagram"
-                >
-                  ◎
-                </a>
-
-                <a
-                  href="#facebook"
-                  aria-label="Facebook"
-                >
-                  f
-                </a>
-
-                <a
-                  href="#x"
-                  aria-label="X"
-                >
-                  𝕏
-                </a>
-
-                <a
-                  href="#youtube"
-                  aria-label="YouTube"
-                >
-                  ▶
-                </a>
-
+        <div className="sf-container">
+          {/* Main columns */}
+          <div className="sf-main">
+            <div className="sf-col">
+              <a href="/" className="sf-logo">
+                Shop<span>ora</span>
+              </a>
+              <p className="sf-about">
+                Premium products, honest prices and a shopping experience built
+                around you. Quality you can trust, delivered to your door.
+              </p>
+              <div className="sf-social">
+                {SOCIALS.map((s) => (
+                  <a key={s.name} href={s.href} aria-label={s.name}>
+                    <Icon d={s.icon} />
+                  </a>
+                ))}
               </div>
             </div>
 
+            <div className="sf-col sf-links">
+              <h4>Shop</h4>
+              <ul>
+                {SHOP_LINKS.map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="sf-col sf-links">
+              <h4>Customer Care</h4>
+              <ul>
+                {CARE_LINKS.map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="sf-col">
+              <h4>Get in Touch</h4>
+              <ul className="sf-contact">
+                <li>
+                  <Icon d={ICONS.pin} />
+                  <span>{CONTACT.address}</span>
+                </li>
+                <li>
+                  <Icon d={ICONS.phone} />
+                  <a href={`tel:${CONTACT.phone.replace(/\s/g, "")}`}>{CONTACT.phone}</a>
+                </li>
+                <li>
+                  <Icon d={ICONS.mail} />
+                  <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                </li>
+                <li>
+                  <Icon d={ICONS.clock} />
+                  <span>{CONTACT.hours}</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-
-          {/* SHOP */}
-          <div className="footer-column">
-            <h3>Shop</h3>
-
-            {shopLinks.map(([label, path]) => (
-              <Link
-                key={label}
-                to={path}
-              >
-                {label}
-              </Link>
+          {/* Trust strip */}
+          <div className="sf-trust">
+            {TRUST.map((t) => (
+              <div key={t.title}>
+                <Icon d={t.icon} />
+                <p>
+                  <strong>{t.title}</strong>
+                  <small>{t.text}</small>
+                </p>
+              </div>
             ))}
           </div>
 
-
-          {/* ACCOUNT */}
-          <div className="footer-column">
-            <h3>Your account</h3>
-
-            {user ? (
-              <>
-                <Link to="/account">
-                  Your Account
-                </Link>
-
-                <Link to="/orders">
-                  Your Orders
-                </Link>
-
-                <Link to="/wishlist">
-                  Wishlist
-                </Link>
-
-                <Link to="/addresses">
-                  Saved Addresses
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link to="/login">
-                  Sign In
-                </Link>
-
-                <Link to="/register">
-                  Create Account
-                </Link>
-
-                <Link to="/login">
-                  Your Orders
-                </Link>
-
-                <Link to="/login">
-                  Wishlist
-                </Link>
-              </>
-            )}
-          </div>
-
-
-          {/* HELP */}
-          <div className="footer-column">
-            <h3>Help &amp; support</h3>
-
-            <Link to="/help">
-              Customer Service
-            </Link>
-
-            <Link to="/orders">
-              Track Orders
-            </Link>
-
-            <Link to="/addresses">
-              Delivery Addresses
-            </Link>
-
-            <a href="#returns">
-              Returns &amp; Refunds
-            </a>
-
-            <a href="#payments">
-              Payment Help
-            </a>
-
-            <a href="mailto:support@shopora.com">
-              Contact Us
-            </a>
-          </div>
-
-
-          {/* ADMIN */}
-          {user?.role === "admin" && (
-            <div className="footer-column footer-admin-column">
-              <h3>Admin</h3>
-
-              <Link to="/admin">
-                Dashboard
-              </Link>
-
-              <Link to="/admin/products">
-                Manage Products
-              </Link>
-
-              <Link to="/admin/orders">
-                Manage Orders
-              </Link>
-
-              <Link to="/admin/users">
-                Manage Users
-              </Link>
-
-              <Link to="/admin/support">
-                Customer Support
-              </Link>
+          {/* Bottom bar */}
+          <div className="sf-bottom">
+            <p>&copy; {new Date().getFullYear()} Shopora. All rights reserved.</p>
+            <div className="sf-pay" aria-label="Accepted payment methods">
+              {PAYMENTS.map((p) => (
+                <span key={p}>{p}</span>
+              ))}
             </div>
-          )}
-
+            <nav className="sf-legal" aria-label="Legal">
+              {LEGAL_LINKS.map((l) => (
+                <a key={l.label} href={l.href}>
+                  {l.label}
+                </a>
+              ))}
+            </nav>
+          </div>
         </div>
-      </section>
+      </footer>
 
-
-      {/* =====================================================
-          TRUST + PAYMENT STRIP
-      ===================================================== */}
-      <section className="footer-trust-strip">
-        <div className="footer-container trust-strip-inner">
-
-          <div className="trust-item">
-            <span aria-hidden="true">✓</span>
-
-            <div>
-              <strong>Secure Checkout</strong>
-              <small>Encrypted payments</small>
-            </div>
-          </div>
-
-
-          <div className="trust-item">
-            <span aria-hidden="true">✓</span>
-
-            <div>
-              <strong>Genuine Products</strong>
-              <small>Quality you can trust</small>
-            </div>
-          </div>
-
-
-          <div className="trust-item">
-            <span aria-hidden="true">✓</span>
-
-            <div>
-              <strong>Easy Returns</strong>
-              <small>Hassle-free process</small>
-            </div>
-          </div>
-
-
-          <div className="payment-methods">
-            <small>We accept</small>
-
-            <b>UPI</b>
-            <b>VISA</b>
-            <b>RuPay</b>
-            <b>COD</b>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* =====================================================
-          BOTTOM BAR
-      ===================================================== */}
-      <div className="footer-bottom">
-        <div className="footer-container footer-bottom-inner">
-
-          <p className="footer-copy">
-            © {new Date().getFullYear()} Shopora.
-            All rights reserved.
-          </p>
-
-
-          <div className="footer-legal">
-            <a href="#privacy">
-              Privacy
-            </a>
-
-            <a href="#terms">
-              Terms
-            </a>
-
-            <a href="#cookies">
-              Cookies
-            </a>
-          </div>
-
-
-          <button
-            type="button"
-            className="footer-top-btn"
-            onClick={scrollTop}
-            aria-label="Back to top"
-          >
-            <span aria-hidden="true">↑</span>
-            Back to top
-          </button>
-
-        </div>
-      </div>
-
-
-      {/* =====================================================
-          DECORATIVE WORDMARK
-      ===================================================== */}
-      <div
-        className="footer-mark"
-        aria-hidden="true"
+      {/* Back to top */}
+      <button
+        type="button"
+        className={`sf-top${showTop ? " show" : ""}`}
+        onClick={scrollToTop}
+        aria-label="Back to top"
       >
-        shopora
-      </div>
-
-    </footer>
+        <Icon d={ICONS.arrowUp} />
+      </button>
+    </>
   );
 }
-
