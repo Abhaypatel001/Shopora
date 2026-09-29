@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 
-
 /* ---------- Data (yahin se links/contact edit karo) ---------- */
 const SHOP_LINKS = [
-  { label: "New Arrivals", href: "/new-arrivals" },
+  { label: "Today's Deals", href: "/sale" },
   { label: "Best Sellers", href: "/best-sellers" },
-  { label: "Men", href: "/men" },
-  { label: "Women", href: "/women" },
-  { label: "Accessories", href: "/accessories" },
-  { label: "Sale", href: "/sale" },
+  { label: "New Releases", href: "/new" },
+  { label: "Mobiles", href: "/mobiles" },
+  { label: "Fashion", href: "/fashion" },
+  { label: "Electronics", href: "/electronics" },
+  { label: "Home & Kitchen", href: "/home-kitchen" },
 ];
 
 const CARE_LINKS = [
-  { label: "My Account", href: "/account" },
-  { label: "Track Your Order", href: "/track-order" },
-  { label: "Shipping & Delivery", href: "/shipping" },
-  { label: "Returns & Refunds", href: "/returns" },
-  { label: "FAQs", href: "/faq" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "Your Account", href: "/account" },
+  { label: "Your Orders", href: "/orders" },
+  { label: "Wishlist", href: "/wishlist" },
+  { label: "Saved Addresses", href: "/addresses" },
+  { label: "Customer Service", href: "/customer-service" },
 ];
 
 const LEGAL_LINKS = [
@@ -82,8 +81,6 @@ const TRUST = [
 
 /* ---------- Component ---------- */
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
@@ -92,45 +89,11 @@ export default function Footer() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    // TODO: yahan apni API / Mailchimp / Formspree call jodo
-    console.log("Subscribed:", email);
-    setSubscribed(true);
-    setEmail("");
-    setTimeout(() => setSubscribed(false), 4000);
-  };
-
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
     <>
       <footer className="sf-footer" id="site-footer">
-        {/* Newsletter */}
-        <div className="sf-container sf-newsletter">
-          <div className="sf-newsletter-box">
-            <div>
-              <h3>Join the Shopora Club</h3>
-              <p>
-                Exclusive offers, new arrivals and style updates — straight to
-                your inbox.
-              </p>
-            </div>
-            <form className="sf-subscribe" onSubmit={handleSubscribe}>
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                aria-label="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <button type="submit">{subscribed ? "Subscribed ✓" : "Subscribe"}</button>
-            </form>
-          </div>
-        </div>
-
         <div className="sf-container">
           {/* Main columns */}
           <div className="sf-main">

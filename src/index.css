@@ -1775,9 +1775,8 @@ input::placeholder, textarea::placeholder { color: var(--subtle); }
   .account-form, .account-info-row, .account-quick-links { padding-left: 17px; padding-right: 17px; }
 }
 /* ==========================================================
-   SHOPORA — Premium Footer
-   Sab classes .sf- prefix se hain, taaki aapki existing CSS se
-   clash na ho. Colors badalne ho to sirf :root wale variables badlo.
+   SHOPORA — Premium Footer (newsletter removed)
+   Ye poora code index.css mein paste karo (purana footer CSS hata kar).
    ========================================================== */
 
 :root {
@@ -1801,7 +1800,7 @@ html { scroll-behavior: smooth; }
   font-family: var(--sf-font);
   font-size: 15px;
   line-height: 1.7;
-  margin-top: 80px;
+  margin-top: 0;
 }
 
 .sf-footer *,
@@ -1824,87 +1823,12 @@ html { scroll-behavior: smooth; }
   padding: 0 24px;
 }
 
-/* ---------- Newsletter band ---------- */
-.sf-newsletter {
-  position: relative;
-  top: -50px;
-  margin-bottom: -10px;
-}
-
-.sf-newsletter-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 36px 44px;
-  background: linear-gradient(135deg, #1b1f2b, #11141c);
-  border: 1px solid var(--sf-border);
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
-}
-
-.sf-newsletter h3 {
-  margin: 0 0 6px;
-  font-size: 1.6rem;
-  color: var(--sf-heading);
-  font-weight: 700;
-  letter-spacing: -0.3px;
-}
-
-.sf-newsletter p { margin: 0; max-width: 420px; }
-
-.sf-subscribe {
-  display: flex;
-  flex: 1;
-  max-width: 470px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--sf-border);
-  border-radius: 50px;
-  padding: 6px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.sf-subscribe:focus-within {
-  border-color: var(--sf-accent);
-  box-shadow: 0 0 0 4px rgba(212, 169, 79, 0.15);
-}
-
-.sf-subscribe input {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: 0;
-  outline: 0;
-  color: var(--sf-heading);
-  font: inherit;
-  padding: 0 20px;
-}
-
-.sf-subscribe input::placeholder { color: #737a8a; }
-
-.sf-subscribe button {
-  border: 0;
-  cursor: pointer;
-  padding: 13px 28px;
-  border-radius: 50px;
-  font: inherit;
-  font-weight: 600;
-  color: #15120a;
-  background: linear-gradient(135deg, var(--sf-accent-hover), var(--sf-accent));
-  transition: transform 0.25s, box-shadow 0.25s;
-}
-
-.sf-subscribe button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(212, 169, 79, 0.35);
-}
-
 /* ---------- Main grid ---------- */
 .sf-main {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr 1.3fr;
   gap: 48px;
-  padding: 30px 0 60px;
+  padding: 70px 0 60px;
 }
 
 .sf-logo {
@@ -2087,28 +2011,20 @@ html { scroll-behavior: smooth; }
 @media (max-width: 1024px) {
   .sf-main { grid-template-columns: 1fr 1fr; gap: 40px; }
   .sf-trust { grid-template-columns: repeat(2, 1fr); }
-  .sf-newsletter-box { flex-direction: column; align-items: flex-start; }
-  .sf-subscribe { max-width: 100%; width: 100%; }
 }
 
 @media (max-width: 640px) {
-  .sf-footer { margin-top: 60px; }
-  .sf-newsletter-box { padding: 28px 22px; }
-  .sf-main { grid-template-columns: 1fr; gap: 34px; padding-bottom: 40px; }
+  .sf-main { grid-template-columns: 1fr; gap: 34px; padding: 50px 0 40px; }
   .sf-trust { grid-template-columns: 1fr; }
   .sf-bottom { flex-direction: column; text-align: center; }
   .sf-legal { flex-wrap: wrap; justify-content: center; gap: 14px 22px; }
   .sf-pay { justify-content: center; }
-  .sf-subscribe { flex-direction: column; border-radius: 18px; padding: 10px; gap: 8px; }
-  .sf-subscribe input { padding: 12px 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .sf-footer *, .sf-top { transition: none !important; }
 }
-
-
 
 
 /* ================== MOTION & ACCESSIBILITY ========================= */
