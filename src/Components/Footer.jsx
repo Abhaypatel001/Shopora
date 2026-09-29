@@ -14,7 +14,7 @@ const CARE_LINKS = [
   { label: "Your Orders", href: "/orders" },
   { label: "Wishlist", href: "/wishlist" },
   { label: "Saved Addresses", href: "/addresses" },
-  { label: "Customer Service", href: "/customer-service" },
+  { label: "Customer Service", href: "/help" },
 ];
 
 const LEGAL_LINKS = [
@@ -63,10 +63,16 @@ const ICONS = {
 };
 
 const SOCIALS = [
-  { name: "Facebook", href: "#", icon: ICONS.facebook },
-  { name: "Instagram", href: "#", icon: ICONS.instagram },
-  { name: "X / Twitter", href: "#", icon: ICONS.x },
-  { name: "YouTube", href: "#", icon: ICONS.youtube },
+  // Ye links platform ke login page kholte hain.
+  // Baad mein apne page ka link chahiye to href badal dena, jaise https://www.instagram.com/shopora
+  { name: "Facebook", href: "https://www.facebook.com/login", icon: ICONS.facebook },
+  { name: "Instagram", href: "https://www.instagram.com/accounts/login/", icon: ICONS.instagram },
+  { name: "X / Twitter", href: "https://x.com/i/flow/login", icon: ICONS.x },
+  {
+    name: "YouTube",
+    href: "https://accounts.google.com/ServiceLogin?service=youtube&continue=https://www.youtube.com/",
+    icon: ICONS.youtube,
+  },
 ];
 
 const TRUST = [
@@ -94,7 +100,13 @@ export default function Footer() {
               </p>
               <div className="sf-social">
                 {SOCIALS.map((s) => (
-                  <a key={s.name} href={s.href} aria-label={s.name}>
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    aria-label={s.name}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Icon d={s.icon} />
                   </a>
                 ))}
